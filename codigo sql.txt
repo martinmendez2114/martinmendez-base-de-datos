@@ -1,0 +1,154 @@
+C:\Users\carlo>docker exec -it restaurante_db psql -U postgres -d restaurante
+Error response from daemon: No such container: restaurante_db
+
+C:\Users\carlo>docker ps
+CONTAINER ID   IMAGE      COMMAND                  CREATED       STATUS       PORTS      NAMES
+2221eeebd79e   postgres   "docker-entrypoint.s…"   3 hours ago   Up 3 hours   5432/tcp   loving_volhard
+
+C:\Users\carlo>docker exec -it loving_volhard psql -U postgres -d restaurante
+psql (17.5 (Debian 17.5-1.pgdg120+1))
+Type "help" for help.
+
+restaurante=# -- Crear la base de datos (si aún no la has creado)
+CREATE DATABASE restaurante;
+
+-- Usar la base de datos
+\c restaurante
+
+-- Tabla de ingredientes
+CREATE TABLE Ingredientes (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    stock NUMERIC NOT NULL,
+    unidad_medida VARCHAR(20)
+);
+
+-- Tabla de platos
+CREATE TABLE Platos (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL,
+    descripcion TEXT,
+    precio NUMERIC(10,2) NOT NULL
+);
+
+-- Relación Plato - Ingrediente
+CREATE TABLE Recetas (
+    id SERIAL PRIMARY KEY,
+    plato_id INT REFERENCES Platos(id),
+    ingrediente_id INT REFERENCES Ingredientes(id),
+    cantidad NUMERIC NOT NULL
+);
+
+);  estado VARCHAR(20) UNIQUEpedidosTIMESTAMPs(id),sos)
+ERROR:  database "restaurante" already exists
+invalid integer value "de" for connection option "port"
+Previous connection kept
+restaurante=# CREATE TABLE CategoriasPlato (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE
+);
+CREATE TABLE
+restaurante=# CREATE TABLE Platos (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    precio NUMERIC(10,2) NOT NULL,
+    categoria_id INT REFERENCES CategoriasPlato(id)
+);
+CREATE TABLE
+restaurante=# CREATE TABLE Ingredientes (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    stock NUMERIC(10,2) NOT NULL,
+    unidad_medida VARCHAR(20)
+);
+CREATE TABLE
+restaurante=# CREATE TABLE Recetas (
+    id SERIAL PRIMARY KEY,
+    plato_id INT REFERENCES Platos(id),
+    ingrediente_id INT REFERENCES Ingredientes(id),
+    cantidad NUMERIC(10,2) NOT NULL
+);
+CREATE TABLE
+restaurante=# CREATE TABLE Inventario (
+    id SERIAL PRIMARY KEY,
+    ingrediente_id INT REFERENCES Ingredientes(id),
+    cantidad NUMERIC(10,2) NOT NULL,
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE
+restaurante=# CREATE TABLE Proveedores (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    contacto VARCHAR(100)
+);
+CREATE TABLE
+restaurante=# CREATE TABLE Mesas (
+    id SERIAL PRIMARY KEY,
+    numero INT NOT NULL,
+    estado VARCHAR(20) NOT NULL CHECK (estado IN ('libre', 'ocupada', 'reservada'))
+);
+CREATE TABLE
+restaurante=# CREATE TABLE ReservasMesa (
+    id SERIAL PRIMARY KEY,
+    mesa_id INT REFERENCES Mesas(id),
+    nombre_cliente VARCHAR(100),
+    fecha TIMESTAMP NOT NULL
+);
+CREATE TABLE
+restaurante=# CREATE TABLE Empleados (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    rol_id INT
+);
+CREATE TABLE
+restaurante=# CREATE TABLE RolesEmpleado (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE
+);
+CREATE TABLE
+restaurante=# ALTER TABLE Empleados ADD CONSTRAINT fk_roles FOREIGN KEY (rol_id) REFERENCES RolesEmpleado(id);
+
+CREATE TABLE Pedidos (
+    id SERIAL PRIMARY KEY,
+    mesa_id INT REFERENCES Mesas(id),
+    empleado_id INT REFERENCES Empleados(id),
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+ALTER TABLE
+CREATE TABLE
+restaurante=# CREATE TABLE DetallesPedido (
+    id SERIAL PRIMARY KEY,
+    pedido_id INT REFERENCES Pedidos(id),
+    plato_id INT REFERENCES Platos(id),
+    cantidad INT NOT NULL
+);
+
+CREATE TABLE AsignacionesMesa (
+    id SERIAL PRIMARY KEY,
+    mesa_id INT REFERENCES Mesas(id),
+    empleado_id INT REFERENCES Empleados(id)
+);
+CREATE TABLE
+CREATE TABLE
+restaurante=# CREATE TABLE Facturas (
+    id SERIAL PRIMARY KEY,
+    pedido_id INT REFERENCES Pedidos(id),
+    total NUMERIC(10,2),
+    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE EstadosMesa (
+    id SERIAL PRIMARY KEY,
+    descripcion VARCHAR(50)
+);
+
+CREATE TABLE EstadosPedido (
+    id SERIAL PRIMARY KEY,
+    descripcion VARCHAR(50)
+);
+CREATE TABLE
+CREATE TABLE
+CREATE TABLE
+restaurante=# script_path = "/mnt/data/init_restaurante.sql"
+with open(script_path, "w") as f:
+    f.write(script_sql)
